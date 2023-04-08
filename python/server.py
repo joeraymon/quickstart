@@ -252,6 +252,27 @@ def get_access_token():
         return json.loads(e.body)
 
 
+"""NEW VERSION"""
+@app.route('/api/set_access_token_v2', methods=['POST'])
+def get_access_token_v2():
+    global access_token
+    global item_id
+    global transfer_id
+    public_token = request.form['public_token']
+    try:
+        exchange_request = ItemPublicTokenExchangeRequest(
+            public_token=public_token)
+        exchange_response = client.item_public_token_exchange(exchange_request)
+        access_token = exchange_response['access_token']
+        item_id = exchange_response['item_id']
+        
+        if 'transfer' in PLAID_PRODUCTS:
+            transfer_id = authorize_and_create_transfer(access_token)
+        return jsonify(exchange_response.to_dict())
+    except plaid.ApiException as e:
+        return json.loads(e.body)
+
+
 # Retrieve ACH or ETF account numbers for an Item
 # https://plaid.com/docs/#auth
 
