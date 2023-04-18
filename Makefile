@@ -4,7 +4,7 @@ ifneq ("$(wildcard docker-compose.local.yml)","")
 DOCKER_COMPOSE_YML += --file docker-compose.local.yml
 endif
 
-language := node
+language := python
 SUCCESS_MESSAGE := "✅ $(language) quickstart is running on http://localhost:3000"
 
 .PHONY: up
